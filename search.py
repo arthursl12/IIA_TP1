@@ -87,13 +87,65 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    input("Press Enter to continue...")
-    util.raiseNotDefined()
-
+    stack = util.Stack()
+    visited = []
+    found_solution = False
+    
+    # We maintain a parentalMap so we can find which node is parent of which.
+    # This will be useful to recover the solution path later
+    # Source (idea): https://stackoverflow.com/questions/12864004/tracing-and-returning-a-path-in-depth-first-search
+    parentalMap = {}
+    
+    # Initially, let's expand the start state (it is done separately because
+    # this is the only node which we don't have cost or action associated)
+    # Check for goal reaching
+    start = problem.getStartState()
+    if (problem.isGoalState(start)):
+        return []
+    # Otherwise, push its children into the stack for further expansion later
+    visited.append(start)
+    children = problem.getSuccessors(start)
+    for child in children:
+        stack.push(child)
+        parentalMap[child] = start
+    
+    # DFS expansion (LIFO)
+    while (not stack.isEmpty()):
+        current_state = stack.pop()
+        (coord, _, _) = current_state
+        
+        if (coord in visited):
+            # Don't expand already visited nodes 
+            continue
+        elif (problem.isGoalState(coord)):
+            # Solution found, we may break now
+            found_solution = True
+            visited.append(coord)
+            break
+        else:
+            # Expand a node: get its successors and add them to the stack
+            visited.append(coord)
+            children = problem.getSuccessors(coord)
+            for child in children:
+                stack.push(child)
+                parentalMap[child] = current_state
+    
+    if (not found_solution):
+        raise "DFS Failed to Find solution!"
+    
+    # We've found the solution, now we need to backtrace the parentMap
+    # so we can recover the path from the start to here
+    actions = []
+    node = current_state
+    while(node != start):
+        actions.append(node[1])
+        node = parentalMap[node]
+        
+    # We trasverse in reverse order, so reverse the list to obtain the
+    # actual solution path
+    actions.reverse()
+    
+    return actions
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
