@@ -205,8 +205,49 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    heap = util.PriorityQueue()
+    visited = []
+    total_distance = {}
+    
+    # Here we must use a different approach for recovering the path, because
+    # we don't have access to enough heap attributes to allow our backtracking.
+    # Now, we  will store the path in the structure, along the node itself
+    
+    start = problem.getStartState()
+    heap.push((start, []), 0)     # Heap stores (node_coords, path_to_get_there)
+    total_distance[start] = 0
+    
+    # UCS expansion
+    while (not heap.isEmpty()):
+        (state, path) = heap.pop()
+        partial_cost = total_distance[state]   # Cost to get to this node
+        
+        if (state in visited):
+            # Don't expand already visited nodes 
+            continue
+        elif (problem.isGoalState(state)):
+            # Solution found, we just return the stored path
+            return path
+        else:
+            # Expand a node, add (or update) its children in heap
+            visited.append(state)
+            children = problem.getSuccessors(state)
+            for (c_coord, c_action, c_cost) in children:
+                if (c_coord in total_distance and total_distance[c_coord] <= partial_cost + c_cost):
+                    # New path to this child node is not better
+                    continue
+                elif (c_coord in total_distance):
+                    # New path to this child node is better, 
+                    # We must update the heap with the new cost
+                    heap.update((c_coord, path+[c_action]), partial_cost + c_cost)
+                else:
+                    # This child node is not in heap, we must place it there
+                    heap.push((c_coord, path+[c_action]), partial_cost + c_cost)
+                    total_distance[c_coord] = partial_cost + c_cost
+    
+    # If we got here, we weren't able to find a solution
+    raise "UCS Failed to Find solution!"
+    
 
 
 def nullHeuristic(state, problem=None):

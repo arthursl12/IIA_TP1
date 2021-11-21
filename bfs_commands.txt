@@ -1,3 +1,0 @@
-python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=bfs
-
-python autograder.py --question passo3

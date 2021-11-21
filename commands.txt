@@ -1,0 +1,10 @@
+python autograder.py --question passo2
+python pacman.py --layout tinyMaze --pacman SearchAgent --agentArgs fn=dfs
+python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=dfs
+python pacman.py --layout bigMaze --zoom 0.5 --pacman SearchAgent --agentArgs fn=dfs
+
+python autograder.py --question passo3
+python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=bfs
+
+python autograder.py --question passo4
+python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=ucs
