@@ -11,3 +11,6 @@ python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=ucs
 
 python autograder.py --question passo5
 python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=gs,heuristic=manhattanHeuristic
+
+python autograder.py --question passo6
+python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=astar,heuristic=manhattanHeuristic

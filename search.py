@@ -264,12 +264,11 @@ def greedySearch(problem, heuristic=nullHeuristic):
     heur_distance[start] = heuristic(start, problem)
     heap.push((start, []), heur_distance[start])     
         # Heap stores (node_coords, path_to_get_there)
-        # Priority based on heuristic
+        # Priority based on heuristic cost
     
     # Best First Search expansion
     while (not heap.isEmpty()):
         (state, path) = heap.pop()
-        # partial_cost = heur_distance[state]   # Cost to get to this node
         
         if (state in visited):
             # Don't expand already visited nodes 
@@ -293,8 +292,51 @@ def greedySearch(problem, heuristic=nullHeuristic):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    heap = util.PriorityQueue()
+    visited = []
+    real_distance = {}
+    heur_distance = {}
+    
+    # We'll combine UCS with GreedySearch
+    
+    start = problem.getStartState()
+    heap.push((start, []), 0)     # Heap stores (node_coords, path_to_get_there)
+    real_distance[start] = 0
+    heur_distance[start] = heuristic(start, problem)
+    heap.push((start, []), real_distance[start] + heur_distance[start])     
+    
+    while (not heap.isEmpty()):
+        (state, path) = heap.pop()
+        real_partial = real_distance[state]
+        # heur_partial = heur_distance[state]
+        
+        if (state in visited):
+            # Don't expand already visited nodes 
+            continue
+        elif (problem.isGoalState(state)):
+            # Solution found, we just return the stored path
+            return path
+        else:
+            # Expand a node, add (or update) its children in heap
+            visited.append(state)
+            children = problem.getSuccessors(state)
+            for (c_coord, c_action, c_cost) in children: 
+                if (c_coord in real_distance and real_distance[c_coord] <= real_partial + c_cost):
+                    # New real cost to this child node is not better
+                    continue
+                elif (c_coord in real_distance):
+                    # New real cost to this child node is better, 
+                    # We must update the heap with the new cost
+                    heap.update((c_coord, path+[c_action]), 
+                                real_partial + c_cost + heuristic(c_coord, problem))
+                else:
+                    # This child node is not in heap, we must place it there
+                    heap.push((c_coord, path+[c_action]), 
+                              real_partial + c_cost + heuristic(c_coord, problem))
+                real_distance[c_coord] = real_partial + c_cost
+    
+    # If we got here, we weren't able to find a solution
+    raise "UCS Failed to Find solution!"
 
 
 def foodHeuristic(state, problem):
