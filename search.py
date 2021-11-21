@@ -202,7 +202,6 @@ def breadthFirstSearch(problem):
     
     return actions
 
-
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     heap = util.PriorityQueue()
@@ -248,8 +247,6 @@ def uniformCostSearch(problem):
     # If we got here, we weren't able to find a solution
     raise "UCS Failed to Find solution!"
     
-
-
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
@@ -257,11 +254,41 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-
 def greedySearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    heap = util.PriorityQueue()
+    visited = []
+    heur_distance = {}
+    
+    start = problem.getStartState()
+    heur_distance[start] = heuristic(start, problem)
+    heap.push((start, []), heur_distance[start])     
+        # Heap stores (node_coords, path_to_get_there)
+        # Priority based on heuristic
+    
+    # Best First Search expansion
+    while (not heap.isEmpty()):
+        (state, path) = heap.pop()
+        # partial_cost = heur_distance[state]   # Cost to get to this node
+        
+        if (state in visited):
+            # Don't expand already visited nodes 
+            continue
+        elif (problem.isGoalState(state)):
+            # Solution found, we just return the stored path
+            return path
+        else:
+            # Expand a node, add (or update) its children in heap
+            visited.append(state)
+            children = problem.getSuccessors(state)
+            for (c_coord, c_action, _) in children:
+                c_cost = heuristic(c_coord, problem)
+                heur_distance[c_coord] = c_cost
+                # Update works as push if node isn't there
+                heap.update((c_coord, path+[c_action]), c_cost)
+    
+    # If we got here, we weren't able to find a solution
+    raise "Best-First Search (Greedy) Failed to Find solution!"
 
 
 def aStarSearch(problem, heuristic=nullHeuristic):

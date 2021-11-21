@@ -8,3 +8,6 @@ python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=bfs
 
 python autograder.py --question passo4
 python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=ucs
+
+python autograder.py --question passo5
+python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=gs,heuristic=manhattanHeuristic
