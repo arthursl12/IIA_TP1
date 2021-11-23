@@ -370,18 +370,88 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     foodlist = foodGrid.asList()
     
+    # =====================================
+    #       Simple Manhattan: 14k
+    # =====================================
+    # Prefers closest food, ignoring walls
+    
+    # if (len(foodlist) == 0):
+    #     return 0
+    
+    # closest = foodlist[0]
+    # closest_distance = util.manhattanDistance(closest, position)
+    # for fx,fy in foodlist:
+    #     distance = util.manhattanDistance((fx,fy), position)
+    #     if (distance < closest_distance):
+    #         closest = (fx,fy)
+    #         closest_distance = distance
+    # return closest_distance
+    
+    # =====================================
+    #       Walking Distance: 12k
+    # =====================================
+    # Prefers closest food, considering walls
+    
+    # if (len(foodlist) == 0):
+    #     return 0
+    # closest = None
+    # closest_distance = 9999999
+    # for fx,fy in foodlist:
+    #     distance = distancePath(position, (fx,fy), problem.startingGameState)
+    #     if (distance < closest_distance):
+    #         closest = (fx,fy)
+    #         closest_distance = distance
+    # return closest_distance
+    
+    # =====================================
+    #       Walking Distance v2: 7k
+    # =====================================
+    # Prefers closest food, considering walls
+    
     if (len(foodlist) == 0):
         return 0
     
-    closest = foodlist[0]
-    closest_distance = util.manhattanDistance(closest, position)
+    # Compute manhattan distance to every food
+    distances = {}
     for fx,fy in foodlist:
-        distance = util.manhattanDistance((fx,fy), position)
-        if (distance < closest_distance):
-            closest = (fx,fy)
-            closest_distance = distance
-    return closest_distance
-        
+        distances[(fx,fy)] = util.manhattanDistance(position, (fx,fy))
+    # Find the closest food, considering Manhattan Distance
+    closest_MH_food = min(distances)
+    closest_MH_dist = distances[closest_MH_food]
+    # Find the actual distance to that food
+    actual_dist = distancePath(position, closest_MH_food, 
+                               problem.startingGameState)
+    
+    # Penalizes each food which is out of row or out of column
+    # of pacman position and nearest food position
+    penalty = 0
+    p_x,p_y = position
+    nf_x, nf_y = closest_MH_food
+    for fx,fy in foodlist:
+        if (((fx != p_x) and (fx != nf_x)) or
+            ((fy != p_y) and (fy != nf_y))):
+            penalty += 1
+    total_cost = actual_dist + penalty
+    return total_cost
+    
+def distancePath(xy1, xy2, gameState):
+    """
+    Finds the 'walking distance' between two points, i.e., considering maze's
+    walls as well, not only straight line distance
+    
+    The idea behind is to run a BFS from one point to another and count the
+    search tree depth.
+    """
+    # We need a SearchProblem object, but the only implemented is 
+    # PositionSearchProblem in searchAgents, so we'll import it
+    from searchAgents import PositionSearchProblem
+    
+    problem = PositionSearchProblem(gameState, start=xy1, goal=xy2, 
+                                    warn=False, visualize=False)
+    path = breadthFirstSearch(problem)
+    distance = len(path)
+    return distance
+    
 
 # Abbreviations
 bfs = breadthFirstSearch
