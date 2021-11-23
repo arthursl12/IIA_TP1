@@ -368,20 +368,20 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    food_count = foodGrid.count()
-    return food_count
-
-def findClosestDist(current_pos, corners):
-  idx = -1
-  min_dist = None
-  for i in range(len(corners)):
-    dist = util.manhattanDistance(current_pos, corners[i])
-    if min_dist == None or min_dist > dist:
-      min_dist = dist
-      idx = i
-
-  return idx, min_dist
+    foodlist = foodGrid.asList()
+    
+    if (len(foodlist) == 0):
+        return 0
+    
+    closest = foodlist[0]
+    closest_distance = util.manhattanDistance(closest, position)
+    for fx,fy in foodlist:
+        distance = util.manhattanDistance((fx,fy), position)
+        if (distance < closest_distance):
+            closest = (fx,fy)
+            closest_distance = distance
+    return closest_distance
+        
 
 # Abbreviations
 bfs = breadthFirstSearch
