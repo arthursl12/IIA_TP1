@@ -14,3 +14,7 @@ python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=gs,heur
 
 python autograder.py --question passo6
 python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=astar,heuristic=manhattanHeuristic
+
+python autograder.py --question passo7
+python pacman.py --layout trickySearch --pacman SearchAgent --agentArgs fn=astar,prob=FoodSearchProblem,heuristic=foodHeuristic
+python pacman.py --layout trickySearch --pacman AStarFoodSearchAgent
