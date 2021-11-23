@@ -371,6 +371,14 @@ def foodHeuristic(state, problem):
     foodlist = foodGrid.asList()
     
     # =====================================
+    #       Food Count: 12k
+    # =====================================
+    # Penalizes by how many foods are left
+    # Admissable, incredibly!
+    
+    return len(foodlist)
+    
+    # =====================================
     #       Simple Manhattan: 14k
     # =====================================
     # Prefers closest food, ignoring walls
@@ -408,31 +416,32 @@ def foodHeuristic(state, problem):
     # =====================================
     # Prefers closest food, considering walls
     
-    if (len(foodlist) == 0):
-        return 0
+    # if (len(foodlist) == 0):
+    #     return 0
     
-    # Compute manhattan distance to every food
-    distances = {}
-    for fx,fy in foodlist:
-        distances[(fx,fy)] = util.manhattanDistance(position, (fx,fy))
-    # Find the closest food, considering Manhattan Distance
-    closest_MH_food = min(distances)
-    closest_MH_dist = distances[closest_MH_food]
-    # Find the actual distance to that food
-    actual_dist = distancePath(position, closest_MH_food, 
-                               problem.startingGameState)
+    # # Compute manhattan distance to every food
+    # distances = {}
+    # for fx,fy in foodlist:
+    #     distances[(fx,fy)] = util.manhattanDistance(position, (fx,fy))
+    # # Find the closest food, considering Manhattan Distance
+    # closest_MH_food = min(distances)
+    # closest_MH_dist = distances[closest_MH_food]
+    # # Find the actual distance to that food
+    # actual_dist = distancePath(position, closest_MH_food, 
+    #                            problem.startingGameState)
     
-    # Penalizes each food which is out of row or out of column
-    # of pacman position and nearest food position
-    penalty = 0
-    p_x,p_y = position
-    nf_x, nf_y = closest_MH_food
-    for fx,fy in foodlist:
-        if (((fx != p_x) and (fx != nf_x)) or
-            ((fy != p_y) and (fy != nf_y))):
-            penalty += 1
-    total_cost = actual_dist + penalty
-    return total_cost
+    # # Penalizes each food which is out of row or out of column
+    # # of pacman position and nearest food position
+    # penalty = 0
+    # p_x,p_y = position
+    # nf_x, nf_y = closest_MH_food
+    # for fx,fy in foodlist:
+    #     if (((fx != p_x) and (fx != nf_x)) or
+    #         ((fy != p_y) and (fy != nf_y))):
+    #         penalty += 1
+    # total_cost = actual_dist + penalty
+    # return total_cost
+    
     
 def distancePath(xy1, xy2, gameState):
     """
