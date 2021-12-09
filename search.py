@@ -297,8 +297,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     real_distance = {}
     heur_distance = {}
     
-    # We'll combine UCS with GreedySearch
-    
+    # We'll combine UCS with GreedySearch  
     start = problem.getStartState()
     heap.push((start, []), 0)     # Heap stores (node_coords, path_to_get_there)
     real_distance[start] = 0
@@ -308,8 +307,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     while (not heap.isEmpty()):
         (state, path) = heap.pop()
         real_partial = real_distance[state]
-        # heur_partial = heur_distance[state]
-        
+
         if (state in visited):
             # Don't expand already visited nodes 
             continue
