@@ -369,47 +369,6 @@ def foodHeuristic(state, problem):
     foodlist = foodGrid.asList()
     
     # =====================================
-    #       Food Count: 12k
-    # =====================================
-    # Penalizes by how many foods are left
-    # Admissable, incredibly!
-    
-    # return len(foodlist)
-    
-    # =====================================
-    #       Simple Manhattan: 14k
-    # =====================================
-    # Prefers closest food, ignoring walls
-    
-    # if (len(foodlist) == 0):
-    #     return 0
-    
-    # closest = foodlist[0]
-    # closest_distance = util.manhattanDistance(closest, position)
-    # for fx,fy in foodlist:
-    #     distance = util.manhattanDistance((fx,fy), position)
-    #     if (distance < closest_distance):
-    #         closest = (fx,fy)
-    #         closest_distance = distance
-    # return closest_distance
-    
-    # =====================================
-    #       Walking Distance: 12k
-    # =====================================
-    # Prefers closest food, considering walls
-    
-    # if (len(foodlist) == 0):
-    #     return 0
-    # closest = None
-    # closest_distance = 9999999
-    # for fx,fy in foodlist:
-    #     distance = distancePath(position, (fx,fy), problem.startingGameState)
-    #     if (distance < closest_distance):
-    #         closest = (fx,fy)
-    #         closest_distance = distance
-    # return closest_distance
-    
-    # =====================================
     #       Walking Distance v2: 7k
     # =====================================
     # Prefers closest food, considering walls
