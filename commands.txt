@@ -18,3 +18,8 @@ python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=astar,h
 python autograder.py --question passo7
 python pacman.py --layout trickySearch --pacman SearchAgent --agentArgs fn=astar,prob=FoodSearchProblem,heuristic=foodHeuristic
 python pacman.py --layout trickySearch --pacman AStarFoodSearchAgent
+
+-------------------------------------------------------------------------------
+Tests
+python pacman.py --layout mediumMaze --pacman SearchAgent --agentArgs fn=dfs
+python pacman.py --layout trickySearch --pacman SearchAgent --agentArgs fn=astar,prob=FoodSearchProblem,heuristic=foodHeuristic
